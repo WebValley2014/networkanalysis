@@ -90,15 +90,6 @@ def laplacian(adj_mat):
  
     return degree(adj_mat)  - adj_mat
 
-# def degree(adj_mat):
-
-#     dim = adj_mat.shape[0]
-#     deg_mat = np.zeros((dim,dim))
-#     for i in range(dim):
-# 	deg_mat[i,i] = sum(adj_mat[i,])
-
-#     return deg_mat
-
 def degree(adj_mat):
 	'''
 	Computes the Degree Matrix
@@ -159,7 +150,7 @@ def thresholder(matrix,threshold):
 	binary[binary<threshold]=0
 	return(binary)
 	
-def glocal(G,H):
+def him(G,H):
 	ed=hamming(G,H)
 	ip=epsilon(G,H,optimal_gamma(G.shape[0]))
 	gl=np.sqrt(0.5*(ed**2+ip**2))
