@@ -90,14 +90,25 @@ def laplacian(adj_mat):
  
     return degree(adj_mat)  - adj_mat
 
+# def degree(adj_mat):
+
+#     dim = adj_mat.shape[0]
+#     deg_mat = np.zeros((dim,dim))
+#     for i in range(dim):
+# 	deg_mat[i,i] = sum(adj_mat[i,])
+
+#     return deg_mat
+
 def degree(adj_mat):
-
-    dim = adj_mat.shape[0]
-    deg_mat = np.zeros((dim,dim))
-    for i in range(dim):
-	deg_mat[i,i] = sum(adj_mat[i,])
-
-    return deg_mat
+	'''
+	Computes the Degree Matrix
+	in: np.array 2D
+	out: np.array 2D
+	'''
+	
+	degs = adj_mat.sum(axis = 0)
+	deg_mat = np.diag(degs)
+	return deg_mat
    
 
 def epsilon(a_one,a_two,gamma): 
