@@ -9,7 +9,7 @@
 import numpy as np
 from scipy.stats import pearsonr
 
-def mknet(M, setCol):  #M is our dear big matrix
+def mknetsamples(M, setCol):  #M is our dear big matrix
 		       #setCol is the array of column indexes chosen
 
 	nRow, nCol = M.shape #define dimensions  
@@ -21,7 +21,7 @@ def mknet(M, setCol):  #M is our dear big matrix
 	#FIXME check of missing elements in the matrix
 	if nRow == 0 or nCol == 0:
 		print 'null input'
-		return None #FIXME could return an empty matrix?
+		return None
 
 	for i in range(1,nRow): #loop on samples indexes
 
@@ -34,6 +34,38 @@ def mknet(M, setCol):  #M is our dear big matrix
 
 			mNet[i,k] = abs(pear[0])
 			mNet[k,i] = abs(pear[0])
+	### mNet is now our network matrix
+
+	return mNet
+
+########
+
+def mknetfeatures(M, setCol):  #M is our dear big matrix
+		       #setCol is the array of column indexes chosen
+
+	nRow, nCol = M.shape #define dimensions
+
+	### let's create the network matrix
+	
+	mNet = np.zeros([setCol,setCol])
+
+	#FIXME check of missing elements in the matrix
+	if nRow == 0 or nCol == 0:
+		print 'null input'
+		return None
+
+	for i in setCol: #loop on feature indexes
+
+		for k in setCol: #loop on feature indexes, again
+
+                        if i < k: #not repeated nodes of features
+			        L1 = [M[j,i] for j in range(nRow)]
+			        L2 = [M[j,k] for j in range(nRow)]
+
+			        pear = pearsonr(L1,L2)    #output as array
+
+			        mNet[i,k] = abs(pear[0])
+			        mNet[k,i] = abs(pear[0])
 	### mNet is now our network matrix
 
 	return mNet
@@ -55,7 +87,7 @@ def mklaplacian (M): #makes a squared  2d-matrix laplacian
 	return L
 
 ########
-## historic interest
+### historic interest
 ##
 ##	for i in range(nRow): #summing rows and printing on diagonal
 ##		temp = 0
