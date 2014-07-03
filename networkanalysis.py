@@ -12,7 +12,7 @@ import distance_functions_2 as df ### him(G,H) with output (hamming, ipsen, him)
 
 def netanalysis(M)   #FIXME
 	infile = open('input.txt','r')
-	setCol1 = infile.read()          #FIXME
+	setCol1 = infile.read()          #FIXME how to read these data?
 	setCol2 = infile.read()          #FIXME
 	mNet1 = mknetfeatures(M,setCol1) # usa le features, non i samples!
 	mNet2 = mknetfeatures(M,setCol2)
@@ -45,8 +45,9 @@ def mknetsamples(M, setCol):  #M is our dear big matrix
 
 			pear = pearsonr(L1,L2)      #output as array
 
-			mNet[i,k] = abs(pear[0])
-			mNet[k,i] = abs(pear[0])
+			if pear > 0.1:  #FIXME is 0.1 fine?
+				mNet[i,k] = abs(pear[0])
+				mNet[k,i] = abs(pear[0])
 	### mNet is now our network matrix
 
 	return mNet
@@ -77,8 +78,9 @@ def mknetfeatures(M, setCol):  #M is our dear big matrix
 
 			        pear = pearsonr(L1,L2)    #output as array
 
-			        mNet[i,k] = abs(pear[0])
-			        mNet[k,i] = abs(pear[0])
+				if pear > 0.1:  #FIXME is 0.1 fine?
+					mNet[i,k] = abs(pear[0])
+					mNet[k,i] = abs(pear[0])
 	### mNet is now our network matrix
 
 	return mNet
