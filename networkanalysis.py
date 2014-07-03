@@ -72,56 +72,6 @@ def mknetfeatures(M, setCol):  #M is our dear big matrix
 	return mNet
 
 ########
-### historic interest
-##
-##def mklaplacian (M): #makes a squared  2d-matrix laplacian
-##	nRow, nCol = M.shape #take dimensions
-##	# check whether the matrix is an adjacency one
-##	if not isthisadj(M):
-##		print 'not an adjacency matrix in input'
-##		return None
-##	#checked
-##
-##	asum = M.sum(axis = 1) #array of the sum of rows (cols?)
-##	mdiag = np.diag(asum)  #degree matrix
-##	L = mdiag - M          #laplacian matrix
-##
-##	return L
-##
-########
-##
-##	for i in range(nRow): #summing rows and printing on diagonal
-##		temp = 0
-##		for j in range(nCol): #ok, nCol is as swag as nRow
-##			temp += M[i,j]
-##		M[i,i] = temp
-##
-##	return M
-##
-########
-### this is not for wheighted graphs
-## def 2dhamming(m1, m2): # finds hamming distance beetween 2 adj matrixes
-##		 #i.e. how many elements they do not have in common
-##	if m1.shape != m2.shape: #checking they've the same shape
-##		print 'invalid input: 2d arrays with same shape needed'
-##		return None
-##	if (not isthisadj(m1)) or (not isthisadj(m2)):
-##		print 'invalid input: both 2d arrays must be adjacency matrixes'
-##		return None
-##	#checked	
-##
-##	nRow, nCol = m1.shape #take dimensions
-##
-##	##controlling only half of each matrix
-##	dist = 0
-##	for i in range(1,nRow):    #loop on all-1 rows
-##		for j in range(i): #loop on all-1 columns
-##			if m1[i,j] != m2[i,j]:
-##				dist += 1
-##
-##	return dist
-##
-########
 
 def isthisadj(m): #checks whether a 2d array is an adjacency matrix or not
 	nRow, nCol = m.shape #take dimensions
