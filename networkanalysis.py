@@ -13,26 +13,45 @@ import distance_functions_2 as df ### him(G,H) with output (hamming, ipsen, him)
 def netanalysis(setCol)	#FIXME
 
 	mdata = np.loadtxt('data.txt')
-	setnames = np.loadtxt('names.txt')
+	setsamples = np.loadtxt('samples.txt')
 	setfeatures = np.loadtxt('features.txt')
 	setlabels = np.loadtxt('labels.txt')
+	
+	if len(setsamples), len(setfeatures) == mdata.shape and len(setsamples) == len(setlabels):
+		dovesani = np.where(setlabels == 0)
+		dovemalati = np.where(setlabels != 0)
+			# positions now recorded
+		msani = np.zeros((len(dovesani) * len(setfeatures))
+		msani = msani.reshape(len(dovesani), len(setfeatures))
+			# zeroed matrix of healthies well-shaped
+		mmalati = np.zeros(len(dovemalati) * len(setfeatures))
+		mmalati = mmalati.reshape(len(dovemalati), len(setfeatures))
+			# zeroed matrix of unhealthies well-shaped
 
-	if len(setnames), len(setfeatures) == mdata.shape and len(setnames) == len(setlabels):
+		r = 0
+		for i in dovesani: # fills in the matrix already created in rows
+			c = 0
+			for j in setfeatures: # and in the columns
+				msani[r, c] = mdata[i, j]
+				c += 1	#goes on with columns
+			r += 1	#goes on with rows
+		# healthies matrix done
 
-		bol = np
-                for i in range(len(setlabels)):
-			if setlabels[i] == 0:
-                                
+		r = 0
+		for i in dovemalati: # fills in the matrix already created in rows
+			c = 0
+			for j in setfeatures: # and in the columns
+				msani[r, c] = mdata[i, j]
+				c += 1	#goes on with columns
+			r += 1	#goes on with rows
+		# unhealthies matrix done
 
+		adjnetsani = mknetfeatures(msani,setCol) # uses features, not samples!
+		adjnetmalati = mknetfeatures(mmalati,setCol)
+		hamming, ipsen, him = df.him(adjnetsani, adjnetmalati)
 
-		mNet1 = np.array([])
-
-
-		adjNet1 = mknetfeatures(mNet1,setCol) # usa le features, non i samples!
-		adjNet2 = mknetfeatures(mNet2,setCol)
-		hamming, ipsen, him = df.him(mNet1,mNet2)
-
-	else print 'invalid input: data non coherent'
+	else:
+		print 'invalid input: data non coherent'
 
 	return him
 
@@ -79,7 +98,7 @@ def mknetfeatures(M, setCol):  #M is our dear big matrix
 	
 	mNet = np.zeros([len(setCol),len(setCol)])
 
-	#FIXME check of missing elements in the matrix
+	# check of missing elements in the matrix
 	if nRow == 0 or nCol == 0:
 		print 'null input'
 		return None
@@ -98,7 +117,7 @@ def mknetfeatures(M, setCol):  #M is our dear big matrix
 					mNet[i,k] = abs(pear[0])
 					mNet[k,i] = abs(pear[0])
 	### mNet is now our network matrix
-
+
 	return mNet
 
 ########
