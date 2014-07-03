@@ -48,7 +48,7 @@ def mknetfeatures(M, setCol):  #M is our dear big matrix
 
 	### let's create the network matrix
 	
-	mNet = np.zeros([setCol,setCol])
+	mNet = np.zeros([len(setCol),len(setCol)])
 
 	#FIXME check of missing elements in the matrix
 	if nRow == 0 or nCol == 0:
@@ -72,23 +72,23 @@ def mknetfeatures(M, setCol):  #M is our dear big matrix
 	return mNet
 
 ########
-
-def mklaplacian (M): #makes a squared  2d-matrix laplacian
-	nRow, nCol = M.shape #take dimensions
-	# check whether the matrix is an adjacency one
-	if not isthisadj(M):
-		print 'not an adjacency matrix in input'
-		return None
-	#checked
-
-	asum = M.sum(axis = 1) #array of the sum of rows (cols?)
-	mdiag = np.diag(asum)  #degree matrix
-	L = mdiag - M          #laplacian matrix
-
-	return L
-
-########
 ### historic interest
+##
+##def mklaplacian (M): #makes a squared  2d-matrix laplacian
+##	nRow, nCol = M.shape #take dimensions
+##	# check whether the matrix is an adjacency one
+##	if not isthisadj(M):
+##		print 'not an adjacency matrix in input'
+##		return None
+##	#checked
+##
+##	asum = M.sum(axis = 1) #array of the sum of rows (cols?)
+##	mdiag = np.diag(asum)  #degree matrix
+##	L = mdiag - M          #laplacian matrix
+##
+##	return L
+##
+########
 ##
 ##	for i in range(nRow): #summing rows and printing on diagonal
 ##		temp = 0
