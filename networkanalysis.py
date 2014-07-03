@@ -66,28 +66,28 @@ def mklaplacian (M): #makes a squared  2d-matrix laplacian
 ##	return M
 ##
 ########
-
-def 2dhamming(m1, m2): # finds hamming distance beetween 2 adj matrixes
-		 #i.e. how many elements they do not have in common
-	if m1.shape != m2.shape: #checking they've the same shape
-		print 'invalid input: 2d arrays with same shape needed'
-		return None
-	if (not isthisadj(m1)) or (not isthisadj(m2)):
-		print 'invalid input: both 2d arrays must be adjacency matrixes'
-		return None
-	#checked	
-
-	nRow, nCol = m1.shape #take dimensions
-
-	##controlling only half of each matrix
-	dist = 0
-	for i in range(1,nRow):    #loop on all-1 rows
-		for j in range(i): #loop on all-1 columns
-			if m1[i,j] != m2[i,j]:
-				dist += 1
-
-	return dist
-
+### this is not for wheighted graphs
+## def 2dhamming(m1, m2): # finds hamming distance beetween 2 adj matrixes
+##		 #i.e. how many elements they do not have in common
+##	if m1.shape != m2.shape: #checking they've the same shape
+##		print 'invalid input: 2d arrays with same shape needed'
+##		return None
+##	if (not isthisadj(m1)) or (not isthisadj(m2)):
+##		print 'invalid input: both 2d arrays must be adjacency matrixes'
+##		return None
+##	#checked	
+##
+##	nRow, nCol = m1.shape #take dimensions
+##
+##	##controlling only half of each matrix
+##	dist = 0
+##	for i in range(1,nRow):    #loop on all-1 rows
+##		for j in range(i): #loop on all-1 columns
+##			if m1[i,j] != m2[i,j]:
+##				dist += 1
+##
+##	return dist
+##
 ########
 
 def isthisadj(m): #checks whether a 2d array is an adjacency matrix or not
