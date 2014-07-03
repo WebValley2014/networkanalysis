@@ -10,6 +10,18 @@ import numpy as np
 from scipy.stats import pearsonr
 import distance_functions_2 as df ### him(G,H) with output (hamming, ipsen, him)!
 
+def netanalysis(M)   #FIXME
+	infile = open('input.txt','r')
+	setCol1 = infile.read()          #FIXME
+	setCol2 = infile.read()          #FIXME
+	mNet1 = mknetfeatures(M,setCol1) # usa le features, non i samples!
+	mNet2 = mknetfeatures(M,setCol2)
+	hamming, ipsen, him = df.him(mNet1,mNet2)
+
+	return him
+
+########
+
 def mknetsamples(M, setCol):  #M is our dear big matrix
 		       #setCol is the array of column indexes chosen
 
@@ -19,7 +31,7 @@ def mknetsamples(M, setCol):  #M is our dear big matrix
 	
 	mNet = np.zeros([nRow,nRow])
 
-	#FIXME check of missing elements in the matrix
+	#check of missing elements in the matrix
 	if nRow == 0 or nCol == 0:
 		print 'null input'
 		return None
@@ -96,5 +108,3 @@ def isthisadj(m): #checks whether a 2d array is an adjacency matrix or not
 if __name__ == '__main__':
 	a = np.matrix([[0,1,2,3],[7,6,5,4],[12,45,3,25]])
 	tst = [0,1,2,3]
-	print mknet(a,tst)
-
