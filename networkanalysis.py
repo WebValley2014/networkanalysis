@@ -10,13 +10,29 @@ import numpy as np
 from scipy.stats import pearsonr
 import distance_functions_2 as df ### him(G,H) with output (hamming, ipsen, him)!
 
-def netanalysis(M)   #FIXME
-	infile = open('input.txt','r')
-	setCol1 = infile.read()          #FIXME how to read these data?
-	setCol2 = infile.read()          #FIXME
-	mNet1 = mknetfeatures(M,setCol1) # usa le features, non i samples!
-	mNet2 = mknetfeatures(M,setCol2)
-	hamming, ipsen, him = df.him(mNet1,mNet2)
+def netanalysis(setCol)	#FIXME
+
+	mdata = np.loadtxt('data.txt')
+	setnames = np.loadtxt('names.txt')
+	setfeatures = np.loadtxt('features.txt')
+	setlabels = np.loadtxt('labels.txt')
+
+	if len(setnames), len(setfeatures) == mdata.shape and len(setnames) == len(setlabels):
+
+		bol = np
+                for i in range(len(setlabels)):
+			if setlabels[i] == 0:
+                                
+
+
+		mNet1 = np.array([])
+
+
+		adjNet1 = mknetfeatures(mNet1,setCol) # usa le features, non i samples!
+		adjNet2 = mknetfeatures(mNet2,setCol)
+		hamming, ipsen, him = df.him(mNet1,mNet2)
+
+	else print 'invalid input: data non coherent'
 
 	return him
 
@@ -82,7 +98,7 @@ def mknetfeatures(M, setCol):  #M is our dear big matrix
 					mNet[i,k] = abs(pear[0])
 					mNet[k,i] = abs(pear[0])
 	### mNet is now our network matrix
-
+
 	return mNet
 
 ########
