@@ -8,6 +8,7 @@
 
 import numpy as np
 from scipy.stats import pearsonr
+import distance_functions_2 as df ### him(G,H) with output (hamming, ipsen, him)!
 
 def mknetsamples(M, setCol):  #M is our dear big matrix
 		       #setCol is the array of column indexes chosen
