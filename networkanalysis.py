@@ -53,7 +53,7 @@ def netanalysis(setCol)	#FIXME
 	else:
 		print 'invalid input: data non coherent'
 
-	return him
+	return (him, adjnetsani, adjnetmalati)
 
 ########
 
