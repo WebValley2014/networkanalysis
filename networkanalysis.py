@@ -24,7 +24,7 @@ def netanalysis(setCol):	#FIXME
 		alabels = []	# list of 2d-matrixes (i.e. one sub-matrix for each label)
 
 		ok = 0	# for the condition of the while loop
-		while ok < len(set(setlabels)):
+		while ok < len(auniquelabels):
 			setaux = np.zeros(len(setfeatures))
 			k = 0
 			for i in np.where(setlabels == np.array(list(set(setlabels)))[ok]):	#this is a very strange 2d-array with the positions of the ok-th different element of setlabels in setlabels itself
@@ -37,39 +37,28 @@ def netanalysis(setCol):	#FIXME
 				k += 1
 			alabels.append(maux)
 			ok += 1
-			### alabels is now the complete list of the sub-matrixes of each label!
+		### alabels is now the complete list of the sub-matrixes of each label!
 
-			#FIXME usa una maux  e usa il procedimento che segue
-			#daje
+		adjmatrixes = []
 
+		for i in range(len(auniquelabels)):	# sgrulla down (?) le labels
+			adjmatrixes.append(mknetfeatures(alabels[i], setCol)	# uses features, not samples!
+		### now, the list adjmatrixes is filled in with the adjacency matrixes of each different label
 
+		himadjmatrix = np.zeros(len(auniquelabels) ** 2).reshape(len(auniquelabels), len(auniquelabels))
+		himadjmatrix = np.matrix(himadjmatrix)
 
-		r = 0
-		for i in dovesani: # fills in the matrix already created in rows
-			c = 0
-			for j in setfeatures: # and in the columns
-				msani[r, c] = mdata[i, j]
-				c += 1	#goes on with columns
-			r += 1	#goes on with rows
-		# healthies matrix done
+		for i in range(1, len(auniquelabels)): #loop on label indexes
 
-		r = 0
-		for i in dovemalati: # fills in the matrix already created in rows
-			c = 0
-			for j in setfeatures: # and in the columns
-				msani[r, c] = mdata[i, j]
-				c += 1	#goes on with columns
-			r += 1	#goes on with rows
-		# unhealthies matrix done
+			for j in range(i): #loop on previous labels
 
-		adjnetsani = mknetfeatures(msani,setCol) # uses features, not samples!
-		adjnetmalati = mknetfeatures(mmalati,setCol)
-		hamming, ipsen, him = df.him(adjnetsani, adjnetmalati)
+				hamming, ipsen, himadjmatrix[i, j] = df.him(adjmatrixes[i], adjmatrixes[j])	#calculates the him distance between two networks
+				himadjmatrix[j, i] = himadjmatrix[i, j]	#makes symmetric the 'adjacency' matrix
 
 	else:
 		print 'invalid input: data non coherent'
 
-	return (him, adjnetsani, adjnetmalati)
+	return (himadjmatrix, auniquelabels)
 
 ########
 
@@ -123,11 +112,11 @@ def mknetfeatures(M, setCol):  #M is our dear big matrix
 
 		for k in setCol: #loop on feature indexes, again
 
-                        if i < k: #not repeated nodes of features
-			        L1 = [M[j,i] for j in range(nRow)]
-			        L2 = [M[j,k] for j in range(nRow)]
+			if i < k: #not repeated nodes of features
+				L1 = [M[j,i] for j in range(nRow)]
+				L2 = [M[j,k] for j in range(nRow)]
 
-			        pear = pearsonr(L1,L2)    #output as array
+				pear = pearsonr(L1,L2)    #output as array
 
 				if pear > 0.1:  #FIXME is 0.1 fine?
 					mNet[i,k] = abs(pear[0])
@@ -155,9 +144,3 @@ def isthisadj(m): #checks whether a 2d array is an adjacency matrix or not
 	return True
 
 ########
-
-
-
-if __name__ == '__main__':
-	a = np.matrix([[0,1,2,3],[7,6,5,4],[12,45,3,25]])
-	tst = [0,1,2,3]
