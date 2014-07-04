@@ -23,19 +23,22 @@ def netanalysis(setCol):	#FIXME
 	setfeatures = setfeatures.read()
 	setfeatures = setfeatures.split('\n')
 	setfeatures.pop(0)	### deletes the title
-	for i in range(len(setfeatures)):
-		j=setfeatures[i].index('\t')
-		setfeatures[i]=setfeatures[j+2:]
 
+	q = len(setfeatures)
+	for i in range(q):
+		j = setfeatures[i]
+		s = j.index('\t')
+		setfeatures[i] = setfeatures[i][s+1:]
 
-	if len(setsamples), len(setfeatures) == mdata.shape and len(setsamples) == len(setlabels):
+	lsmpl, lstfr = mdata.shape
+	if lsmpl == len(setsamples) and lsftr == len(setfeatures) and len(setsamples) == len(setlabels):
 
-		auniquelabels = np.unique(setlabels)	### array of different labels which are in setlabels
+		aunilabels = np.unique(setlabels)	### array of different labels which are in setlabels
 
 		alabels = []	# list of 2d-matrixes (i.e. one sub-matrix for each label)
 
 		ok = 0	# for the condition of the while loop
-		while ok < len(auniquelabels):
+		while ok < len(aunilabels):
 			setaux = np.zeros(len(setfeatures))
 			k = 0
 			for i in np.where(setlabels == np.array(list(set(setlabels)))[ok]):	#this is a very strange 2d-array with the positions of the ok-th different element of setlabels in setlabels itself
@@ -48,18 +51,20 @@ def netanalysis(setCol):	#FIXME
 				k += 1
 			alabels.append(maux)
 			ok += 1
+		
 		### alabels is now the complete list of the sub-matrixes of each label!
-
 		adjmatrixes = []
 
-		for i in range(len(auniquelabels)):	# sgrulla down le labels
-			adjmatrixes.append(mknetfeatures(alabels[i], setCol)	# uses features, not samples!
+		for i in range(len(aunilabels)):	# sgrulla down le labels
+			adjmatrixes.append(mknetfeatures(alabels[i], setCol))	# uses features, not samples!
 		### now, the list adjmatrixes is filled in with the adjacency matrixes of each different label
 
-		himadjmatrix = np.zeros(len(auniquelabels) ** 2).reshape(len(auniquelabels), len(auniquelabels))
+		#xxx = len(aunilabels)
+		himadjmatrix = np.zeros(len(aunilabels) ** 2)
+		himadjmatrix = himadjmatrix.reshape(len(aunilabels), len(aunilabels))
 		himadjmatrix = np.matrix(himadjmatrix)
 
-		for i in range(1, len(auniquelabels)): #loop on label indexes
+		for i in range(1, len(aunilabels)): #loop on label indexes
 
 			for j in range(i): #loop on previous labels
 
@@ -69,7 +74,7 @@ def netanalysis(setCol):	#FIXME
 	else:
 		print 'invalid input: data non coherent'
 
-	return (himadjmatrix, auniquelabels)
+	return (himadjmatrix, aunilabels)
 
 ########
 
