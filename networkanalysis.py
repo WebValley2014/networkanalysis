@@ -13,10 +13,21 @@ import distance_functions_2 as df ### him(G,H) with output (hamming, ipsen, him)
 def netanalysis(setCol):	#FIXME
 
 	mdata = np.loadtxt('data.txt')
-	setsamples = np.loadtxt('samples.txt')
-	setfeatures = np.loadtxt('features.txt')
 	setlabels = np.loadtxt('labels.txt')
-	
+
+	setsamples = open('samples.txt')
+	setsamples = setsamples.read()
+	setsamples = setsamples.split('\n')	#now, setsamples is a list of (the right) strings
+						#there is (shoud be?) no title
+	setfeatures = open('features.txt')
+	setfeatures = setfeatures.read()
+	setfeatures = setfeatures.split('\n')
+	setfeatures.pop(0)	### deletes the title
+	for i in range(len(setfeatures)):
+		j=setfeatures[i].index('\t')
+		setfeatures[i]=setfeatures[j+2:]
+
+
 	if len(setsamples), len(setfeatures) == mdata.shape and len(setsamples) == len(setlabels):
 
 		auniquelabels = np.unique(setlabels)	### array of different labels which are in setlabels
@@ -41,7 +52,7 @@ def netanalysis(setCol):	#FIXME
 
 		adjmatrixes = []
 
-		for i in range(len(auniquelabels)):	# sgrulla down (?) le labels
+		for i in range(len(auniquelabels)):	# sgrulla down le labels
 			adjmatrixes.append(mknetfeatures(alabels[i], setCol)	# uses features, not samples!
 		### now, the list adjmatrixes is filled in with the adjacency matrixes of each different label
 
