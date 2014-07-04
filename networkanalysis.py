@@ -10,7 +10,7 @@ import numpy as np
 from scipy.stats import pearsonr
 import distance_functions_2 as df ### him(G,H) with output (hamming, ipsen, him)!
 
-def netanalysis(setCol)	#FIXME
+def netanalysis(setCol):	#FIXME
 
 	mdata = np.loadtxt('data.txt')
 	setsamples = np.loadtxt('samples.txt')
@@ -19,14 +19,15 @@ def netanalysis(setCol)	#FIXME
 	
 	if len(setsamples), len(setfeatures) == mdata.shape and len(setsamples) == len(setlabels):
 
-		nlabels = len(set(setlabels))	# how many different labels there are
-		mlabels = np.zeros(nlabels)	# 1d-array of 2d-arrays (one for each label)
-		mwhere = np.zeros(nlabels)	# 1d-array of 2d-arrays (one for each set of position of the labels in the big dear matrix
-		ok = len(set(setlabels)) - 1	# for the condition of the while loop
-		while ok >= 0:
+		auniquelabels = np.unique(setlabels)	### array of different labels which are in setlabels
+
+		alabels = []	# list of 2d-matrixes (i.e. one sub-matrix for each label)
+
+		ok = 0	# for the condition of the while loop
+		while ok < len(set(setlabels)):
 			setaux = np.zeros(len(setfeatures))
 			k = 0
-			for i in np.where(setlabels == np.array(list(set(setlabels)))[ok])	#this is a very strange 2d-array with the positions of the ok-th different element of setlabels in setlabels itself
+			for i in np.where(setlabels == np.array(list(set(setlabels)))[ok]):	#this is a very strange 2d-array with the positions of the ok-th different element of setlabels in setlabels itself
 				maux = np.matrix(np.zeros(len(np.where(setlabels == np.array(list(set(setlabels)))[ok])) * len(setfeatures)).reshape(len(np.where(setlabels == np.array(list(set(setlabels)))[ok]))), len(setfeatures)) # dimensions are the right ones, trust me
 				j = 0
 				for t in setfeatures:
@@ -34,17 +35,14 @@ def netanalysis(setCol)	#FIXME
 					j += 1
 				maux[k,:] = setaux
 				k += 1
-			#FIXME  ora fai la matrice di tutte le mauxes!
-			ok -= 1
+			alabels.append(maux)
+			ok += 1
+			### alabels is now the complete list of the sub-matrixes of each label!
 
-		'''
-		msani = np.zeros((len(dovesani) * len(setfeatures))
-		msani = msani.reshape(len(dovesani), len(setfeatures))
-			# zeroed matrix of healthies well-shaped
-		mmalati = np.zeros(len(dovemalati) * len(setfeatures))
-		mmalati = mmalati.reshape(len(dovemalati), len(setfeatures))
-			# zeroed matrix of unhealthies well-shaped
-		'''
+			#FIXME usa una maux  e usa il procedimento che segue
+			#daje
+
+
 
 		r = 0
 		for i in dovesani: # fills in the matrix already created in rows
