@@ -10,19 +10,21 @@ import numpy as np
 from scipy.stats import pearsonr
 import distance_functions_2 as df ### him(G,H) with output (hamming, ipsen, him)!
 
-def netanalysis(setCol):	#FIXME
+def na(setCol):#netanalysis(setCol):	#FIXME
 
 	mdata = np.loadtxt('data.txt')
 	setlabels = np.loadtxt('labels.txt')
 
-	setsamples = open('samples.txt')
+	setsamples = open('samples2.txt')
 	setsamples = setsamples.read()
 	setsamples = setsamples.split('\n')	#now, setsamples is a list of (the right) strings
 						#there is (shoud be?) no title
 	setfeatures = open('features.txt')
 	setfeatures = setfeatures.read()
 	setfeatures = setfeatures.split('\n')
-	setfeatures.pop(0)	### deletes the title
+	#setfeatures.pop(0)	### deletes the title
+	setfeatures.pop(-1)	#FIXME
+	setsamples.pop(-1)	#FIXME
 
 	q = len(setfeatures)
 	for i in range(q):
@@ -30,49 +32,58 @@ def netanalysis(setCol):	#FIXME
 		s = j.index('\t')
 		setfeatures[i] = setfeatures[i][s+1:]
 
-	lsmpl, lstfr = mdata.shape
-	if lsmpl == len(setsamples) and lsftr == len(setfeatures) and len(setsamples) == len(setlabels):
+	lsmpl, lsftr = mdata.shape
+	if len(setsamples) == len(setlabels):	#da indentare tutto il dopo
 
-		aunilabels = np.unique(setlabels)	### array of different labels which are in setlabels
+		if lsmpl == len(setlabels) and lsftr == len(setfeatures):
 
-		alabels = []	# list of 2d-matrixes (i.e. one sub-matrix for each label)
+			aunilabels = np.unique(setlabels)	### array of different labels which are in setlabels
 
-		ok = 0	# for the condition of the while loop
-		while ok < len(aunilabels):
-			setaux = np.zeros(len(setfeatures))
-			k = 0
-			for i in np.where(setlabels == np.array(list(set(setlabels)))[ok]):	#this is a very strange 2d-array with the positions of the ok-th different element of setlabels in setlabels itself
-				maux = np.matrix(np.zeros(len(np.where(setlabels == np.array(list(set(setlabels)))[ok])) * len(setfeatures)).reshape(len(np.where(setlabels == np.array(list(set(setlabels)))[ok]))), len(setfeatures)) # dimensions are the right ones, trust me
-				j = 0
-				for t in setfeatures:
-					setaux[j] = mdata[i, t]
-					j += 1
-				maux[k,:] = setaux
-				k += 1
-			alabels.append(maux)
-			ok += 1
-		
-		### alabels is now the complete list of the sub-matrixes of each label!
-		adjmatrixes = []
+			alabels = []	# list of 2d-matrixes (i.e. one sub-matrix for each label)
 
-		for i in range(len(aunilabels)):	# sgrulla down le labels
-			adjmatrixes.append(mknetfeatures(alabels[i], setCol))	# uses features, not samples!
-		### now, the list adjmatrixes is filled in with the adjacency matrixes of each different label
+			ok = 0	# for the condition of the while loop
+			while ok < len(aunilabels):
+				setaux = np.zeros(len(setCol))
+				k = 0
+				for i in np.where(setlabels == np.array(list(set(setlabels)))[ok]):	#this is a very strange 2d-array with the positions of the ok-th different element of setlabels in setlabels itself
+					maux = np.matrix(np.zeros(len(np.where(setlabels == np.array(list(set(setlabels)))[ok])) * len(setfeatures)))
+					maux = maux.reshape(len(np.where(setlabels == np.array(list(set(setlabels))[ok]))), len(setfeatures))	# dimensions are the right ones, trust me
+					j = 0
+					for t in setCol:
+						print mdata[i, t] #FIXME
+						setaux[j] = mdata[i, t]
+						j += 1
+					maux[k,:] = setaux
+					k += 1
+				alabels.append(maux)
+				ok += 1
 
-		#xxx = len(aunilabels)
-		himadjmatrix = np.zeros(len(aunilabels) ** 2)
-		himadjmatrix = himadjmatrix.reshape(len(aunilabels), len(aunilabels))
-		himadjmatrix = np.matrix(himadjmatrix)
+			### alabels is now the complete list of the sub-matrixes of each label!
+			adjmatrixes = []
 
-		for i in range(1, len(aunilabels)): #loop on label indexes
+			for i in range(len(aunilabels)):	# sgrulla down le labels
+				adjmatrixes.append(mknetfeatures(alabels[i], setCol))	# uses features, not samples!
+			### now, the list adjmatrixes is filled in with the adjacency matrixes of each different label
 
-			for j in range(i): #loop on previous labels
+			#xxx = len(aunilabels)
+			himadjmatrix = np.zeros(len(aunilabels) ** 2)
+			himadjmatrix = himadjmatrix.reshape(len(aunilabels), len(aunilabels))
+			himadjmatrix = np.matrix(himadjmatrix)
 
-				hamming, ipsen, himadjmatrix[i, j] = df.him(adjmatrixes[i], adjmatrixes[j])	#calculates the him distance between two networks
-				himadjmatrix[j, i] = himadjmatrix[i, j]	#makes symmetric the 'adjacency' matrix
+			for i in range(1, len(aunilabels)): #loop on label indexes
+
+				for j in range(i): #loop on previous labels
+
+					hamming, ipsen, himadjmatrix[i, j] = df.him(adjmatrixes[i], adjmatrixes[j])	#calculates the him distance between two networks
+					himadjmatrix[j, i] = himadjmatrix[i, j]	#makes symmetric the 'adjacency' matrix
+
+		else:
+			print 'invalid input: data non coherent'
+			return None
 
 	else:
-		print 'invalid input: data non coherent'
+		print 'error: samples.txt and features.txt are not shaped in the same way'
+		return None
 
 	return (himadjmatrix, aunilabels)
 
