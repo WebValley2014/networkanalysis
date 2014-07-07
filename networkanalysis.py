@@ -10,9 +10,9 @@ import numpy as np
 from scipy.stats import pearsonr
 import distance_functions_2 as df ### him(G,H) with output (hamming, ipsen, him)!
 
-def na(setCol):#netanalysis(setCol):	#FIXME
+def na(setCol,mdata):#netanalysis(setCol):	#FIXME
 
-	mdata = np.loadtxt('data.txt')
+	FIXME mdata = np.loadtxt('data.txt')
 	setlabels = np.loadtxt('labels.txt')
 
 	setsamples = open('samples2.txt')
@@ -22,7 +22,6 @@ def na(setCol):#netanalysis(setCol):	#FIXME
 	setfeatures = open('features.txt')
 	setfeatures = setfeatures.read()
 	setfeatures = setfeatures.split('\n')
-	#setfeatures.pop(0)	### deletes the title
 	setfeatures.pop(-1)	#FIXME
 	setsamples.pop(-1)	#FIXME
 
@@ -33,7 +32,7 @@ def na(setCol):#netanalysis(setCol):	#FIXME
 		setfeatures[i] = setfeatures[i][s+1:]
 
 	lsmpl, lsftr = mdata.shape
-	if len(setsamples) == len(setlabels):	#da indentare tutto il dopo
+	if len(setsamples) == len(setlabels):
 
 		if lsmpl == len(setlabels) and lsftr == len(setfeatures):
 
@@ -43,37 +42,34 @@ def na(setCol):#netanalysis(setCol):	#FIXME
 
 			ok = 0	# for the condition of the while loop
 			while ok < len(aunilabels):
-				setaux = np.zeros(len(setCol))
-				k = 0
-				for i in np.where(setlabels == np.array(list(set(setlabels)))[ok]):	#this is a very strange 2d-array with the positions of the ok-th different element of setlabels in setlabels itself
-					maux = np.matrix(np.zeros(len(np.where(setlabels == np.array(list(set(setlabels)))[ok])) * len(setfeatures)))
-					maux = maux.reshape(len(np.where(setlabels == np.array(list(set(setlabels))[ok]))), len(setfeatures))	# dimensions are the right ones, trust me
-					j = 0
-					for t in setCol:
-						print mdata[i, t] #FIXME
-						setaux[j] = mdata[i, t]
-						j += 1
-					maux[k,:] = setaux
-					k += 1
+				#setaux = np.zeros(len(setCol))
+				#setaux2 = np.zeros(len(setCol))	#auxiliar arrays
+				r2 = 0
+				maux = np.zeros((len(np.where(setlabels == aunilabels[ok])[0]), len(setCol)))
+				for r in np.where(setlabels == np.array(list(set(setlabels)))[ok])[0]:	#this is a very strange 2d-array with the positions of the ok-th different element of setlabels in setlabels itself
+					#print aunilabels
+					
+					c2 = 0
+					for c in setCol:
+						maux[r2, c2] = mdata[r, c]
+						c2 += 1
+					r2 += 1
 				alabels.append(maux)
 				ok += 1
 
-			### alabels is now the complete list of the sub-matrixes of each label!
+				### alabels is now the complete list of the sub-matrixes of each label!
 			adjmatrixes = []
 
 			for i in range(len(aunilabels)):	# sgrulla down le labels
-				adjmatrixes.append(mknetfeatures(alabels[i], setCol))	# uses features, not samples!
-			### now, the list adjmatrixes is filled in with the adjacency matrixes of each different label
-
-			#xxx = len(aunilabels)
-			himadjmatrix = np.zeros(len(aunilabels) ** 2)
-			himadjmatrix = himadjmatrix.reshape(len(aunilabels), len(aunilabels))
-			himadjmatrix = np.matrix(himadjmatrix)
-
+				adjmatrixes.append(mknetfeatures(alabels[i]))	# uses features, not samples!
+				### now, the list adjmatrixes is filled in with the adjacency matrixes of each different label
+			himadjmatrix = np.zeros((len(aunilabels), len(aunilabels)))
+			
 			for i in range(1, len(aunilabels)): #loop on label indexes
 
 				for j in range(i): #loop on previous labels
-
+					print adjmatrixes[i]
+					print adjmatrixes[j]
 					hamming, ipsen, himadjmatrix[i, j] = df.him(adjmatrixes[i], adjmatrixes[j])	#calculates the him distance between two networks
 					himadjmatrix[j, i] = himadjmatrix[i, j]	#makes symmetric the 'adjacency' matrix
 
@@ -85,7 +81,7 @@ def na(setCol):#netanalysis(setCol):	#FIXME
 		print 'error: samples.txt and features.txt are not shaped in the same way'
 		return None
 
-	return (himadjmatrix, aunilabels)
+	return (himadjmatrix)#, aunilabels)
 
 ########
 
@@ -121,31 +117,34 @@ def mknetsamples(M, setCol):  #M is our dear big matrix
 
 ########
 
-def mknetfeatures(M, setCol):  #M is our dear big matrix
-		       #setCol is the array of column indexes chosen
-
+def mknetfeatures(M,thre):#M is our dear big matrix
+			#attempt: to make it work on all columns, instead than on a given set
 	nRow, nCol = M.shape #define dimensions
 
 	### let's create the network matrix
-	
-	mNet = np.zeros([len(setCol),len(setCol)])
+	mNet = np.zeros((nCol, nCol))
 
 	# check of missing elements in the matrix
 	if nRow == 0 or nCol == 0:
 		print 'null input'
 		return None
 
-	for i in setCol: #loop on feature indexes
+	for i in np.arange(nCol): #loop on feature indexes
 
-		for k in setCol: #loop on feature indexes, again
+		for k in np.arange(nCol): #loop on feature indexes, again
 
 			if i < k: #not repeated nodes of features
 				L1 = [M[j,i] for j in range(nRow)]
 				L2 = [M[j,k] for j in range(nRow)]
-
-				pear = pearsonr(L1,L2)    #output as array
-
-				if pear > 0.1:  #FIXME is 0.1 fine?
+				
+				if np.var(L1)==0 and np.var(L2)==0:
+					pear=[1.0,123]
+				elif np.var(L1)==0 or np.var(L2)==0:
+					pear=[0.,123]
+				else:
+					pear = pearsonr(L1,L2)    #output as array
+				
+				if pear > thre:  #FIXME is 0.1 fine?
 					mNet[i,k] = abs(pear[0])
 					mNet[k,i] = abs(pear[0])
 	### mNet is now our network matrix
