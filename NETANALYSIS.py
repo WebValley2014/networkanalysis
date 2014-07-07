@@ -1,21 +1,25 @@
 import numpy as np
 from scipy.stats import pearsonr
+import pickle as pkl
 import distance_functions_2 as df ### him(G,H) with output (hamming, ipsen, him)!
 
 class NETANALYSIS:
-	def __init__(self, dataname, labelsname, samplesname, featuresname,setCol):
+	def __init__(self, dataname, labelsname, samplesname, featuresname, setCol, outputpath):	### X.txt, Y.txt, sampleIDs.txt, names.txt, np.array([]), outlstadjmtr.pkl
 		self.dataname = dataname
 		self.labelsname = labelsname
 		self.samplesname = samplesname
 		self.featuresname = featuresname
 		self.setCol = setCol
+		self.outputpath = outputpath
 
 ########
 
 	def run(self):
 		self.loadfiles()
 		self.findsubmatrixes()
-		return self.mkadjmatrixes()
+		ADJM = self.mkadjmatrixes()
+		self.mkoutput()
+		return ADJM
 
 ########
 
@@ -26,12 +30,12 @@ class NETANALYSIS:
 		self.setsamples = open(self.samplesname)
 		self.setsamples = self.setsamples.read()
 		self.setsamples = self.setsamples.split('\n')	#now, setsamples is a list of (the right) strings
-		self.setsamples.pop(-1)	#FIXME
+		self.setsamples.pop(-1)	#fixes an error due to the split function
 
 		self.setfeatures = open(self.featuresname)
 		self.setfeatures = self.setfeatures.read()
 		self.setfeatures = self.setfeatures.split('\n')
-		self.setfeatures.pop(-1)	#FIXME
+		self.setfeatures.pop(-1)
 
 		q = len(self.setfeatures)
 		for i in range(q):
@@ -39,10 +43,8 @@ class NETANALYSIS:
 			s = j.index('\t')
 			self.setfeatures[i] = self.setfeatures[i][s+1:]
 
-		lsmpl, lsftr =self.mdata.shape
-		if len(self.setsamples) != len(self.setlabels):
-			if lsmpl != len(self.setlabels) or lsftr != len(self.setfeatures):
-				print 'error, invalid input: data not coherent'
+		lsmpl, lsftr = self.mdata.shape
+		if len(self.setsamples) != len(self.setlabels) or lsmpl != len(self.setlabels) or lsftr != len(self.setfeatures):
 			print 'error, invalid input: data not coherent'
 
 ########
@@ -66,27 +68,25 @@ class NETANALYSIS:
 				r2 += 1
 			self.alabels.append(maux)
 			ok += 1
-
-		### alabels is now the complete list of the sub-matrixes of each label!
+		### alabels is now the complete list of the sub-matrices of each label!
 
 ########
 
 	def mkadjmatrixes(self):
 		self.adjmatrixes = []
 		for i in range(len(self.aunilabels)):	# sgrulla down le labels
-			self.adjmatrixes.append(self.mknetfeatures(self.alabels[i],0.1))	# uses features, not samples!
-				### now, the list adjmatrixes is filled in with the adjacency matrixes of each different label
+			self.adjmatrixes.append(self.mknetfeatures(self.alabels[i],0.1))	#FIXME uses features, not samples! 0.1 is the threshold: check it!
+		self.adjmatrixes = np.array(self.adjmatrixes)
+				### now, the list adjmatrixes is filled in with the adjacency matrices of each different label
 		self.himadjmatrix = np.zeros((len(self.aunilabels), len(self.aunilabels)))
 			
 		for i in range(1, len(self.aunilabels)): #loop on label indexes
 
-			for j in range(i): #loop on previous labels
-					#print adjmatrixes[i]
-					#print adjmatrixes[j]
+			for j in range(i):	#loop on previous labels
 				hamming, ipsen, self.himadjmatrix[i, j] = df.him(self.adjmatrixes[i], self.adjmatrixes[j])	#calculates the him distance between two networks
 				self.himadjmatrix[j, i] = self.himadjmatrix[i, j]	#makes symmetric the 'adjacency' matrix
 		
-		return (self.himadjmatrix)#, aunilabels)
+		return (self.himadjmatrix)	#, aunilabels)
 
 ########
 
@@ -117,9 +117,19 @@ class NETANALYSIS:
 					else:
 						pear = pearsonr(L1,L2)    #output as array
 				
-					if pear > thre:  #FIXME is 0.1 fine?
+					if pear > thre:
 						self.mNet[i,k] = abs(pear[0])
 						self.mNet[k,i] = abs(pear[0])
 		### mNet is now our network matrix
 
 		return self.mNet
+
+########
+
+	def mkoutput(self):	# saves the list of adjacency matrices in the outputpath
+				# WARNING: it has to be a .pkl file!!!
+		outfile = open(self.outputpath, 'w+b')
+		pkl.dump(self.adjmatrixes, outfile)
+		outfile.close()
+
+########
