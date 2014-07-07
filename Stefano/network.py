@@ -1,6 +1,7 @@
-from igraph import Graph
+import igraph
 import pickle
 import numpy as np
+import random
 
 def get_randColor():
     #RETURN A EXADECIMAL RANDOM COLOR ie #ff45e2
@@ -38,30 +39,29 @@ def drawNetwork(**kwargs):
     lineColor = kwargs.get('lineColor', '#787878')
     outDir = kwargs.get('outDir', 'networks') 
     outFile = kwargs.get('outFile', 'testNetwork.png')
-    
+    g = igraph.Graph.Adjacency(list(matrix))
     #plotting the network
-
-def networkListFromPckle(srcListMatrix=r'C:\pythontmp\numpyArray.pkl')
+    
+def networkListFromPickle(srcListMatrix=r'C:\pythontmp\numpyArray.pkl'):
     """
     set the data for create the network
 
     args:
     *srcListMatrix*
         (str)
-        sorce file of the list of matrixs. File '*.pkl' need
-        
+        sorce file of the list of matrixs. File '*.pkl' need  
     """
     infile1 = open(srcListMatrix, 'r+b')
     file1 = pickle.load(infile1)                       # This is LISTADIMATRICI
     infile1.close()
     
-    myConf = [{ 'matrix'    : ,
-                'nodeColor' : '',
-                'lineColor'  : '' }]
-
+    myConf = {}
+    print len(file1)
     for mtr in file1:
+        print mtr
         myConf['matrix'] = mtr
         myConf['nodeColor'] = get_randColor()
         myConf['lineColor'] = '#787878'
         drawNetwork(**myConf)
-        
+
+networkListFromPickle('fakedata/prova.pkl')
