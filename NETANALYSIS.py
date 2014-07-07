@@ -76,6 +76,7 @@ class NETANALYSIS:
 		self.adjmatrixes = []
 		for i in range(len(self.aunilabels)):	# sgrulla down le labels
 			self.adjmatrixes.append(self.mknetfeatures(self.alabels[i],0.1))	#FIXME uses features, not samples! 0.1 is the threshold: check it!
+		self.adjmatrixes = np.array(self.adjmatrixes)
 				### now, the list adjmatrixes is filled in with the adjacency matrices of each different label
 		self.himadjmatrix = np.zeros((len(self.aunilabels), len(self.aunilabels)))
 			
