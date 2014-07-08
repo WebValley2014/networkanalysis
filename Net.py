@@ -21,6 +21,7 @@ class NETANALYSIS:
         self.findsubmatrixes()
         self.mkadjmatrixes()
         self.mkpkloutput()
+        return  #FIXME lista di pathnames dei .png
         #return ADJM    # output as .pkl file
 
 ########
@@ -190,7 +191,7 @@ class NETANALYSIS:
 	    visual_style["bbox"] = (900, 900)
 	    visual_style["margin"] = 20
 	    #plotting the network
-	    igraph.plot(g, **visual_style)
+	    #igraph.plot(g, **visual_style)
 
 ########
 
