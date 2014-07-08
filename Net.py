@@ -6,13 +6,12 @@ import random
 
 class Net:
 
-    def __init__(self, dataname, labelsname, samplesname, featuresname, rankingname, pkloutputpath, pngoutputpath): ### X.txt, Y.txt, sampleIDs.txt, names.txt, ,np.array([]), pklout.pkl, /pngout (as a folder)
+    def __init__(self, dataname, labelsname, samplesname, featuresname, rankingname, pngoutputpath): ### X.txt, Y.txt, sampleIDs.txt, names.txt, ,np.array([]), /pngout (as a folder)
         self.dataname = dataname
         self.labelsname = labelsname
         self.samplesname = samplesname
         self.featuresname = featuresname
         self.setCol = setCol
-        self.pkloutputpath = pkloutputpath
         self.pngoutputpath = pngoutputpath
 
 ########
