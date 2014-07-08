@@ -68,10 +68,10 @@ class Net:
 
 ########
 
-	def get_randColor():
-	    #RETURN A EXADECIMAL RANDOM COLOR ie #ff45e2
-	    r = lambda: random.randint(0, 255)
-	    return '#%02X%02X%02X' % (r(), r(), r())
+    def get_randColor():
+        #RETURN A EXADECIMAL RANDOM COLOR ie #ff45e2
+        r = lambda: random.randint(0, 255)
+        return '#%02X%02X%02X' % (r(), r(), r())
 
 ########
 
