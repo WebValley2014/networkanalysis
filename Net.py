@@ -6,7 +6,7 @@ import random
 
 class NETANALYSIS:
 
-    def __init__(self, dataname, labelsname, samplesname, featuresname, setCol, outputpath):	### X.txt, Y.txt, sampleIDs.txt, names.txt, np.array([]), outlstadjmtr.pkl
+    def __init__(self, dataname, labelsname, samplesname, featuresname, setCol, pkloutputpath, pngoutputpath): ### X.txt, Y.txt, sampleIDs.txt, names.txt, np.array([]), pklout.pkl, pngout (as folder ?)
         self.dataname = dataname
         self.labelsname = labelsname
         self.samplesname = samplesname
@@ -144,7 +144,7 @@ class NETANALYSIS:
 
 ########
         #FIXME
-    def mkpngoutput(self):  #saves the .png pictures in 
+    def mkpngoutput(self):  # saves the .png pictures in pngoutputpath
         
 
 ########
