@@ -194,26 +194,22 @@ class NETANALYSIS:
 
 ########
 
-	def networkListFromPickle(srcListMatrix=r'C:\pythontmp\numpyArray.pkl'):#, srcFileName=''):
-		"""
-		set the data for create the network
+    def networkList(self):
+        """
+        set the data for create the network
 
-		args:
-		*srcListMatrix*
-		    (str)
-		    sorce file of the list of matrixs. File '*.pkl' need  
-		"""
-		infile1 = open(srcListMatrix, 'r+b')
-		file1 = pickle.load(infile1)
-		infile1.close()
-		
-		myConf = {}
-		for mtr in file1:
-		    print mtr
-		    myConf['matrix'] = mtr
-		    myConf['nodeColor'] = get_randColor()
-		    myConf['lineColor'] = '#787878'
-		    #myConf['listNames'] = labelReader(srcFileName)
-		    drawNetwork(**myConf)
+        args:
+        *srcListMatrix*
+            (str)
+            sorce file of the list of matrixs. File '*.pkl' need  
+        """
+        myConf = {}
+        for mtr in self.adjmatrixes:
+
+            myConf['matrix'] = mtr
+            myConf['nodeColor'] = self.get_randColor()
+            myConf['lineColor'] = '#787878'
+            #myConf['listNames'] = labelReader(srcFileName)
+            self.drawNetwork(**myConf)
 
 ########
