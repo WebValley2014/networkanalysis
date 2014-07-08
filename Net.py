@@ -6,12 +6,13 @@ import random
 
 class Net:
 
-    def __init__(self, dataname, labelsname, samplesname, featuresname, rankingname, pngoutputpath): ### ('X.txt', 'Y.txt', 'sampleIDs.txt', 'names.txt', 'X_l2r_l2loss_svc_SVM_std_featurelist.txt', '/pngout') (as a folder)
+    def __init__(self, dataname, labelsname, samplesname, featuresname, rankingname, metricsname, pngoutputpath): ### ('X.txt', 'Y.txt', 'sampleIDs.txt', 'names.txt', 'X_l2r_l2loss_svc_SVM_std_featurelist.txt', 'X_l2r_l2loss_svc_SVM_std_metrics.txt', '/pngout') (last one as a folder)
         self.dataname = dataname
         self.labelsname = labelsname
         self.samplesname = samplesname
         self.featuresname = featuresname
         self.rankingname = rankingname
+        self.metricsname = metricsname
         self.pngoutputpath = pngoutputpath
 
 ########
@@ -66,6 +67,14 @@ class Net:
             self.setrank[i].split('\t')
             self.setrank[i] = self.setrank[i][0]
 
+        filemetrics = open(self.metricsname)
+        nmetrics = filemetrics.readline()
+        filemetrics.close()
+        self.nmetrics = self.nmetrics.split('\t')
+        self.nmetrics = self.nmetrics[1]
+        self.nmetrics = self.nmetrics[:-1]
+        self.nmetrics = int(self.nmetrics)
+
 ########
 
     def get_randColor():
@@ -84,11 +93,13 @@ class Net:
         ok = 0	# for the condition of the while loop
         while ok < len(self.aunilabels):
             r2 = 0
-            maux = np.zeros((len(np.where(self.setlabels == self.aunilabels[ok])[0]), len(self.setCol)))
+            maux = np.zeros((len(np.where(self.setlabels == self.aunilabels[ok])[0]), nmetrics))
             for r in np.where(self.setlabels == np.array(list(set(self.setlabels)))[ok])[0]:	#this is a very strange 2d-array with the positions of the ok-th different element of setlabels in setlabels itself
                 #print aunilabels
                 c2 = 0
-                for c in self.setCol:
+                for c in self.setlabels[self.nmetrics] self.setCol:#FIXME
+                for i in range(self.nmetrics)
+                    c = self.setlabels[self.setrank[i]]
                     maux[r2, c2] = self.mdata[r, c]
                     c2 += 1
                 r2 += 1
@@ -178,11 +189,11 @@ class Net:
         output filename. Defaults to `testNetwork.png'.
 	    """
 	    # manage args
-	    matrix = kwargs.get('matrix')*3
-	    nodeColor = kwargs.get('nodeColor', 'red')
-	    lineColor = kwargs.get('lineColor', '#787878')
-	    outDir = kwargs.get('outDir', 'networks') 
-	    outFile = kwargs.get('outFile', 'testNetwork.png')
+        matrix = kwargs.get('matrix')*3
+        nodeColor = kwargs.get('nodeColor', 'red')
+        lineColor = kwargs.get('lineColor', '#787878')
+        outDir = kwargs.get('outDir', 'networks') 
+        outFile = kwargs.get('outFile', 'testNetwork.png')
         if not os.path.exists(outDir):
             os.makedirs(outDir)
         filePath = os.path.join(outDir, outFile)
