@@ -152,30 +152,30 @@ class Net:
 
 ########
 
-	def drawNetwork(**kwargs):
-	    """
-	    Read the data stored in self.metrics, using column 0 as
-	    x axis values. Select the columns specified by *valueCol*,
-	    *minCol*, *maxCol* as Y values and print a png chart.
-	    
-	    args:
-	    *matrix*
-		(numpy matrix)
-		matrix of adjacency    
-	    -----------------------
-	    optional args:
-	    *nodeColor*
-		(color)
-		color of the nodes. Defaults to "red".
-	    *lineColor*
-		(color)
-		The color of the func line (Y values). It defaults to "grey - #787878".
-	    *oudDir*
-		(str)
-		output dir. Defaults to `networks'.
-	    *outFile*
-		(str)
-		output filename. Defaults to `testNetwork.png'.
+    def drawNetwork(**kwargs):
+        """
+        Read the data stored in self.metrics, using column 0 as
+        x axis values. Select the columns specified by *valueCol*,
+        *minCol*, *maxCol* as Y values and print a png chart.
+
+        args:
+        *matrix*
+        (numpy matrix)
+        matrix of adjacency    
+        -----------------------
+        optional args:
+        *nodeColor*
+        (color)
+        color of the nodes. Defaults to "red".
+        *lineColor*
+        (color)
+        The color of the func line (Y values). It defaults to "grey - #787878".
+        *oudDir*
+        (str)
+        output dir. Defaults to `networks'.
+        *outFile*
+        (str)
+        output filename. Defaults to `testNetwork.png'.
 	    """
 	    # manage args
 	    matrix = kwargs.get('matrix')*3
