@@ -97,7 +97,6 @@ class Net:
             for r in np.where(self.setlabels == np.array(list(set(self.setlabels)))[ok])[0]:	#this is a very strange 2d-array with the positions of the ok-th different element of setlabels in setlabels itself
                 #print aunilabels
                 c2 = 0
-                for c in self.setlabels[self.nmetrics] self.setCol:#FIXME
                 for i in range(self.nmetrics)
                     c = self.setlabels[self.setrank[i]]
                     maux[r2, c2] = self.mdata[r, c]
