@@ -34,8 +34,7 @@ def drawNetwork(**kwargs):
         output filename. Defaults to `testNetwork.png'.
     """
     # manage args
-    matrix = kwargs.get('matrix')*100
-    matrix[0,1]=150
+    matrix = kwargs.get('matrix')*10
     nodeColor = kwargs.get('nodeColor', 'red')
     lineColor = kwargs.get('lineColor', '#787878')
     outDir = kwargs.get('outDir', 'networks') 
@@ -44,16 +43,30 @@ def drawNetwork(**kwargs):
     visual_style = {}
     visual_style["vertex_size"] = 20
     visual_style["vertex_color"] = nodeColor
-    visual_style["vertex_label"] = ''
-    visual_style["edge_width"] = True
+    visual_style["vertex_label"] = ('111', '222', '333', '444')
+    visual_style["edge_weight"] = True
     #visual_style["layout"] = layout_kamada_kawai
-    visual_style["bbox"] = (300, 300)
+    visual_style["bbox"] = (900, 900)
     visual_style["margin"] = 20
     #plotting the network
     g = igraph.Graph.Weighted_Adjacency(list(matrix),mode=igraph.ADJ_MAX)
     igraph.plot(g, **visual_style)
+    
+def labelReader(srcFileLabel=''):
+    """
+    read the labels of the 
+    
+    args:
+    *srcLabel*
+        (str)
+        the source of the file
+    
+    out:
+        a list of strings of each samples
+    """
+    
 
-def networkListFromPickle(srcListMatrix=r'C:\pythontmp\numpyArray.pkl'):
+def networkListFromPickle(srcListMatrix=r'C:\pythontmp\numpyArray.pkl', srcFileName=''):
     """
     set the data for create the network
 
@@ -66,8 +79,8 @@ def networkListFromPickle(srcListMatrix=r'C:\pythontmp\numpyArray.pkl'):
     file1 = pickle.load(infile1)                       # This is LISTADIMATRICI
     infile1.close()
     
+    #file1[0] = np.array([[0, 2, 3, 1], [2, 0, 10000, 5], [3, 10000, 0, 42], [1, 5, 42, 0]])
     myConf = {}
-    print len(file1)
     for mtr in file1:
         print mtr
         myConf['matrix'] = mtr
@@ -75,4 +88,4 @@ def networkListFromPickle(srcListMatrix=r'C:\pythontmp\numpyArray.pkl'):
         myConf['lineColor'] = '#787878'
         drawNetwork(**myConf)
 
-networkListFromPickle('fakedata/outarrmtr.pkl')
+networkListFromPickle('fakedata/outarrmtr.pkl', )
