@@ -12,7 +12,7 @@ import distance_functions_2 as df ### him(G,H) with output (hamming, ipsen, him)
 
 def na(setCol,mdata):#netanalysis(setCol):	#FIXME
 
-	FIXME mdata = np.loadtxt('data.txt')
+	mdata = np.loadtxt('data.txt')
 	setlabels = np.loadtxt('labels.txt')
 
 	setsamples = open('samples2.txt')
