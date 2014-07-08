@@ -19,7 +19,6 @@ class NETANALYSIS:
 		self.findsubmatrixes()
 		self.mkadjmatrixes()
 		self.mkoutput()
-		#return ADJM	# output as .pkl file
 
 ########
 
