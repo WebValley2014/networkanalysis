@@ -4,15 +4,16 @@ import pickle as pkl
 import distance_functions_2 as df ### him(G,H) with output (hamming, ipsen, him)!
 import random
 
-class NETANALYSIS:
+class Net:
 
-    def __init__(self, dataname, labelsname, samplesname, featuresname, setCol, pkloutputpath, pngoutputpath): ### X.txt, Y.txt, sampleIDs.txt, names.txt, np.array([]), pklout.pkl, pngout (as folder ?)
+    def __init__(self, dataname, labelsname, samplesname, featuresname, rankingname, pkloutputpath, pngoutputpath): ### X.txt, Y.txt, sampleIDs.txt, names.txt, ,np.array([]), pklout.pkl, /pngout (as a folder)
         self.dataname = dataname
         self.labelsname = labelsname
         self.samplesname = samplesname
         self.featuresname = featuresname
         self.setCol = setCol
-        self.outputpath = outputpath
+        self.pkloutputpath = pkloutputpath
+        self.pngoutputpath = pngoutputpath
 
 ########
 
