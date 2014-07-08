@@ -21,7 +21,7 @@ class Net:
         self.findsubmatrixes()
         self.mkadjmatrixes()
         self.mkpngoutput()
-        #return #FIXME# himadjmatrixes to DBizzarri
+        return self.himadjmatrix        #to DBizzarri
 
 ########
 
@@ -112,7 +112,7 @@ class Net:
     	        hamming, ipsen, self.himadjmatrix[i, j] = df.him(self.adjmatrixes[i], self.adjmatrixes[j])	#calculates the him distance between two networks
                 self.himadjmatrix[j, i] = self.himadjmatrix[i, j]	#makes symmetric the 'adjacency' matrix
 
-        return (self.himadjmatrix)	#, aunilabels)
+        #return (self.himadjmatrix)	#, aunilabels)
 
 ########
 
