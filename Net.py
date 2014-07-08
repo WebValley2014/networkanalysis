@@ -5,6 +5,7 @@ import distance_functions_2 as df ### him(G,H) with output (hamming, ipsen, him)
 import random
 
 class NETANALYSIS:
+
     def __init__(self, dataname, labelsname, samplesname, featuresname, setCol, outputpath):	### X.txt, Y.txt, sampleIDs.txt, names.txt, np.array([]), outlstadjmtr.pkl
         self.dataname = dataname
         self.labelsname = labelsname
@@ -19,8 +20,8 @@ class NETANALYSIS:
         self.loadfiles()
         self.findsubmatrixes()
         self.mkadjmatrixes()
-        self.mkoutput()
-        #return ADJM	# output as .pkl file
+        self.mkpkloutput()
+        #return ADJM    # output as .pkl file
 
 ########
 
@@ -88,7 +89,7 @@ class NETANALYSIS:
         self.adjmatrixes = np.array(self.adjmatrixes)
 		        ### now, the list adjmatrixes is filled in with the adjacency matrices of each different label
         self.himadjmatrix = np.zeros((len(self.aunilabels), len(self.aunilabels)))
-	
+
         for i in range(1, len(self.aunilabels)): #loop on label indexes
 
             for j in range(i):	#loop on previous labels
@@ -135,11 +136,16 @@ class NETANALYSIS:
 
 ########
 
-    def mkoutput(self):	# saves the list of him adjacency matrices in the outputpath
+    def mkpkloutput(self):	# saves the list of him adjacency matrices in the outputpath
                 # WARNING: it has to be a .pkl file!!!
         outfile = open(self.outputpath, 'w+b')
         pkl.dump(self.himadjmatrixes, outfile)
         outfile.close()
+
+########
+        #FIXME
+    def mkpngoutput(self):  #saves the .png pictures in 
+        
 
 ########
 
@@ -178,39 +184,13 @@ class NETANALYSIS:
 	    visual_style = {}
 	    visual_style["vertex_size"] = 20
 	    visual_style["vertex_color"] = nodeColor
-	    visual_style["vertex_label"] = ('111', '222', '333', '444')
+	    visual_style["vertex_label"] = self.setlabels
 	    visual_style["edge_width"] = g.es["weight"]
 	    #visual_style["layout"] = layout_kamada_kawai
 	    visual_style["bbox"] = (900, 900)
 	    visual_style["margin"] = 20
 	    #plotting the network
 	    igraph.plot(g, **visual_style)
-
-########
-
-	def labelReader(srcFileLabel=''):
-	    """
-	    read the labels of the 
-	    
-	    args:
-	    *srcLabel*
-		(str)
-		the source of the file
-	    
-	    out:
-		(str)
-		a list of strings of each samples
-	    """
-	    flabels = open(srcFileLabel)
-	    txtlabels = flabels.read()
-	    flables.close()
-	    txtlabels.split('\n')
-	    txtlabels.pop(-1)
-	    for i in range(len(txtlabels)):
-		j = t[i].index('d') #in labels.txt there should be just a list of 'merged#number#'
-		t[i] = t[i][j+1:]
-	    # now, txtlabels is a list of string which are, actually, numbers
-	    return txtlabels
 
 ########
 
