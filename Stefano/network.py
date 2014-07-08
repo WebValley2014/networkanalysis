@@ -39,9 +39,19 @@ def drawNetwork(**kwargs):
     lineColor = kwargs.get('lineColor', '#787878')
     outDir = kwargs.get('outDir', 'networks') 
     outFile = kwargs.get('outFile', 'testNetwork.png')
-    g = igraph.Graph.Adjacency(list(matrix))
+
+    visual_style = {}
+    visual_style["vertex_size"] = 20
+    visual_style["vertex_color"] = nodeColor
+    visual_style["vertex_label"] = ''
+    visual_style["edge_width"] = []
+    #visual_style["layout"] = layout_kamada_kawai
+    visual_style["bbox"] = (300, 300)
+    visual_style["margin"] = 20
     #plotting the network
-    
+    g = igraph.Graph.Adjacency(list(matrix))
+    igraph.plot(g, **visual_style)
+
 def networkListFromPickle(srcListMatrix=r'C:\pythontmp\numpyArray.pkl'):
     """
     set the data for create the network
@@ -60,8 +70,10 @@ def networkListFromPickle(srcListMatrix=r'C:\pythontmp\numpyArray.pkl'):
     for mtr in file1:
         print mtr
         myConf['matrix'] = mtr
-        myConf['nodeColor'] = get_randColor()
+        a = get_randColor()
+        print a
+        myConf['nodeColor'] = a
         myConf['lineColor'] = '#787878'
         drawNetwork(**myConf)
 
-networkListFromPickle('fakedata/prova.pkl')
+networkListFromPickle('fakedata/outarrmtr.pkl')
