@@ -17,15 +17,16 @@ class NETANALYSIS:
 	def run(self):
 		self.loadfiles()
 		self.findsubmatrixes()
-		ADJM = self.mkadjmatrixes()
+		self.mkadjmatrixes()
 		self.mkoutput()
-		return ADJM
+		#return ADJM	# output as .pkl file
 
 ########
 
 	def loadfiles(self):
 		self.mdata = np.loadtxt(self.dataname)
 		self.setlabels = np.loadtxt(self.labelsname)
+
 
 		self.setsamples = open(self.samplesname)
 		self.setsamples = self.setsamples.read()
@@ -126,10 +127,10 @@ class NETANALYSIS:
 
 ########
 
-	def mkoutput(self):	# saves the list of adjacency matrices in the outputpath
+	def mkoutput(self):	# saves the list of him adjacency matrices in the outputpath
 				# WARNING: it has to be a .pkl file!!!
 		outfile = open(self.outputpath, 'w+b')
-		pkl.dump(self.adjmatrixes, outfile)
+		pkl.dump(self.himadjmatrixes, outfile)
 		outfile.close()
 
 ########
