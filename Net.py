@@ -6,11 +6,12 @@ import random
 
 class Net:
 
-    def __init__(self, dataname, labelsname, samplesname, featuresname, rankingname, pngoutputpath): ### X.txt, Y.txt, sampleIDs.txt, names.txt, ,np.array([]), /pngout (as a folder)
+    def __init__(self, dataname, labelsname, samplesname, featuresname, rankingname, pngoutputpath): ### ('X.txt', 'Y.txt', 'sampleIDs.txt', 'names.txt', 'X_l2r_l2loss_svc_SVM_std_featurelist.txt', '/pngout') (as a folder)
         self.dataname = dataname
         self.labelsname = labelsname
         self.samplesname = samplesname
         self.featuresname = featuresname
+        self.rankingname = rankingname
         self.pngoutputpath = pngoutputpath
 
 ########
@@ -19,36 +20,49 @@ class Net:
         self.loadfiles()
         self.findsubmatrixes()
         self.mkadjmatrixes()
-        self.mkpkloutput()
-        return  #FIXME lista di pathnames dei .png
-        #return ADJM    # output as .pkl file
+        self.mkpngoutput()
+        #return #FIXME# himadjmatrixes to DBizzarri
 
 ########
 
     def loadfiles(self):
-        self.mdata = np.loadtxt(self.dataname)
-        self.setlabels = np.loadtxt(self.labelsname)
+        self.mdata = np.loadtxt(self.dataname)          ## data
+        self.setlabels = np.loadtxt(self.labelsname)    ## labels
 
 
-        self.setsamples = open(self.samplesname)
-        self.setsamples = self.setsamples.read()
+        filesamples = open(self.samplesname)            ## samples
+        self.setsamples = filesamples.read()
+        filesamples.close()
         self.setsamples = self.setsamples.split('\n')	#now, setsamples is a list of (the right) strings
         self.setsamples.pop(-1)	#fixes an error due to the split function
 
-        self.setfeatures = open(self.featuresname)
-        self.setfeatures = self.setfeatures.read()
-        self.setfeatures = self.setfeatures.split('\n')
-        self.setfeatures.pop(-1)
+        filefeatures = open(self.featuresname)
+        thesetfeatures = filefeatures.read()
+        filefeatures.close()
+        thesetfeatures = thesetfeatures.split('\n')
+        thesetfeatures.pop(-1)
 
-        q = len(self.setfeatures)
-        for i in range(q):
-            j = self.setfeatures[i]
-            s = j.index('\t')
-            self.setfeatures[i] = self.setfeatures[i][s+1:]
+        self.setfeatures = []                           ## set of features (only numbers)
+        self.legendfeatures = []                        ## legend of features (only names, in the same order)
+
+        for i in range(len(thesetfeatures)):
+            j = thesetfeatures[i]
+            t = j.index('\t')
+            self.setfeatures.append(thesetfeatures[i][:t])
+            self.legendfeatures.append(thesetfeatures[i][t+1:])
 
         lsmpl, lsftr = self.mdata.shape
         if len(self.setsamples) != len(self.setlabels) or lsmpl != len(self.setlabels) or lsftr != len(self.setfeatures):
             print 'error, invalid input: data not coherent'
+
+        fileranking = open(self.rankingname)
+        self.setrank = fileranking.read()
+        self.setrank = self.setrank.split('\n')
+        self.setrank.pop(-1)
+        self.setrank.pop(0)
+        for i in range(len(self.setrank)):
+            self.setrank[i].split('\t')
+            self.setrank[i] = self.setrank[i][0]
 
 ########
 
@@ -133,14 +147,6 @@ class Net:
         ### mNet is now our network matrix
 
         return self.mNet
-
-########
-
-    def mkpkloutput(self):	# saves the list of him adjacency matrices in the outputpath
-                # WARNING: it has to be a .pkl file!!!
-        outfile = open(self.outputpath, 'w+b')
-        pkl.dump(self.himadjmatrixes, outfile)
-        outfile.close()
 
 ########
         #FIXME
