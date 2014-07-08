@@ -49,6 +49,8 @@ class Net:
             j = thesetfeatures[i]
             t = j.index('\t')
             self.setfeatures.append(thesetfeatures[i][:t])
+            d = self.setfeatures[i].index('d')
+            self.setfeatures[i] = self.setfeatures[i][d+1:]
             self.legendfeatures.append(thesetfeatures[i][t+1:])
 
         lsmpl, lsftr = self.mdata.shape
@@ -149,11 +151,6 @@ class Net:
         return self.mNet
 
 ########
-        #FIXME
-    def mkpngoutput(self):  # saves the .png pictures in pngoutputpath
-        
-
-########
 
 	def drawNetwork(**kwargs):
 	    """
@@ -213,12 +210,15 @@ class Net:
             sorce file of the list of matrixs. File '*.pkl' need  
         """
         myConf = {}
+        n = 0
         for mtr in self.adjmatrixes:
 
             myConf['matrix'] = mtr
             myConf['nodeColor'] = self.get_randColor()
             myConf['lineColor'] = '#787878'
+            myConf['outPath'] = self.pngoutputpath
+            myConf['label'] = unique(self.setlabels)[n]
             #myConf['listNames'] = labelReader(srcFileName)
             self.drawNetwork(**myConf)
-
+            n += 1
 ########
