@@ -1,3 +1,9 @@
+#######################################################
+## this is the class Net.                            ##
+## it has been proudly imagined and happily coded by ##
+## Davide Leonessi & Stefano Valentini      (c) 2014 ##
+#######################################################
+
 import numpy as np
 from scipy.stats import pearsonr
 import pickle as pkl
@@ -22,7 +28,7 @@ class Net:
         self.findsubmatrixes()
         self.mkadjmatrixes()
         #FIXME self.mkpngoutput()
-        return self.himadjmatrix        #to DBizzarri
+        #return self.himadjmatrix        #to DBizzarri
 
 ########
 
@@ -206,6 +212,19 @@ class Net:
         visual_style["margin"] = 20
         #plotting the network
         igraph.plot(g, filePath, **visual_style)
+
+        ####FIXME####
+        outDict = {}
+        outDict['adjmatrix'] = self.himadjmatrix
+        outDict2 = {}
+        outDict['chars'] = outDict2
+        listtitles = []
+        listgraphpaths = []
+        for i in self.aunilabels
+            listtitles.append(self.aunilabels[1])
+        outDict2['titles'] = listtitles
+        outDict2['graphpaths'] = listgraphpaths
+        ####FIXME####
 
 ########
 
