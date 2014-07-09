@@ -1,7 +1,7 @@
 #######################################################
 ## this is the class Net.                            ##
 ## it has been proudly imagined and happily coded by ##
-## Davide Leonessi & Stefano Valentini      (c) 2014 ##
+## Davide Leonessi & Stefano Valentini      (c) 2014 ##																				still #WaitingFor #Visintainer
 #######################################################
 
 import numpy as np
@@ -222,13 +222,13 @@ class Net:
         print degrees
         for i in range(len(degrees)):
             degrees[i] = degrees[i] * 5
-        print degrees
         visual_style["vertex_size"] = degrees
         visual_style["layout"] = g.layout("circle")
-        visual_style["bbox"] = (750, 750)       ####FIXME####
+        #bbox = BoundingBox(750, 750, 750, 750)
+        #visual_style["bbox"] = bbox       ####FIXME####
         visual_style["margin"] = 20
         #plotting the network
-        igraph.plot(g, filePath, **visual_style)
+        igraph.plot(g, filePath, bbox = (1200,1200), **visual_style)
 
 ########
 
