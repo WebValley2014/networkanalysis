@@ -260,5 +260,6 @@ class Net:
         self.outDict = {}
         self.outDict['img'] = [f for f in self.listgraphpaths]
         self.outDict['titles'] = [t for t in self.listtitles]
+        self.outDict['matrix'] = self.himadjmatrix
 
 ########
