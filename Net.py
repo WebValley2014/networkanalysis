@@ -62,6 +62,10 @@ class Net:
             self.setfeatures[i] = self.setfeatures[i][d+1:]
             self.legendfeatures.append(thesetfeatures[i][t+1:])
 
+        for i in range(len(self.legendfeatures)):       ## taking only the last field of the name
+            self.legendfeatures[i] = self.legendfeatures[i].split(';')
+            self.legendfeatures[i] = self.legendfeatures[i][-1]
+
         lsmpl, lsftr = self.mdata.shape
         if len(self.setsamples) != len(self.setlabels) or lsmpl != len(self.setlabels) or lsftr != len(self.setfeatures):
             print 'error, invalid input: data not coherent'
@@ -210,15 +214,18 @@ class Net:
         visual_style["title"] = title
         visual_style["vertex_size"] = 20
         visual_style["vertex_color"] = nodeColor
-        visual_style["vertex_label"] = self.setfeatures
+        visual_style["vertex_label"] = self.legendfeatures
+        visual_style["label_angle"] = 1.57
+        visual_style["label_dist"] = 100
         visual_style["edge_width"] = g.es["weight"]
-        a = g.degree()
-        for i in range(len(a)):
-            a[i] = a[i]/10
-        visual_style["vertex_size"] = a
-        
-        #visual_style["layout"] = layout_kamada_kawai
-        visual_style["bbox"] = (5000, 5000)       #FIXME
+        degrees = g.degree()
+        print degrees
+        for i in range(len(degrees)):
+            degrees[i] = degrees[i] * 5
+        print degrees
+        visual_style["vertex_size"] = degrees
+        visual_style["layout"] = g.layout("circle")
+        visual_style["bbox"] = (750, 750)       ####FIXME####
         visual_style["margin"] = 20
         #plotting the network
         igraph.plot(g, filePath, **visual_style)
@@ -246,7 +253,7 @@ class Net:
                 os.makedirs(saveDirectory)
             myConf['outDir'] = saveDirectory
             myConf['outFile'] = 'graph_label_' + str(int(self.aunilabels[n])) + '.png'
-            myConf['label'] = self.aunilabels[n]
+            myConf['label'] = self.legendfeatures
             myConf['title'] = 'Graph of the label ' + str(self.aunilabels[n])
             self.listtitles.append('Graph of the label ' + str(self.aunilabels[n]))
             self.listgraphpaths.append(os.path.join(myConf['outDir'], myConf['outFile']))
@@ -265,5 +272,5 @@ class Net:
 ########
 
 if __name__ == '__main__':
-    n = Net('X.txt', 'Y.txt', 'sampleIDs.txt', 'names.txt', 'X_l2r_l2loss_svc_SVM_std_featurelist.txt', 'X_l2r_l2loss_svc_SVM_std_metrics.txt', 'outfolder', 0.95)
+    n = Net('gevers/X.txt', 'gevers/Y.txt', 'gevers/sampleIDs.txt', 'gevers/names.txt', 'gevers/X_l2r_l2loss_svc_SVM_std_featurelist.txt', 'gevers/X_l2r_l2loss_svc_SVM_std_metrics.txt', 'outfolder', 0.1)
     n.run()
