@@ -13,7 +13,7 @@ import os
 
 class Net:
 
-    def __init__(self, dataname, labelsname, samplesname, featuresname, rankingname, metricsname, outputpath, thre): ### ('X.txt', 'Y.txt', 'sampleIDs.txt', 'names.txt', 'X_l2r_l2loss_svc_SVM_std_featurelist.txt', 'X_l2r_l2loss_svc_SVM_std_metrics.txt', 'pngout', 0.5) (last one as a folder)
+    def __init__(self, dataname, labelsname, samplesname, featuresname, rankingname, metricsname, outputpath, thre): ### ('X.txt', 'Y.txt', 'sampleIDs.txt', 'names.txt', 'X_l2r_l2loss_svc_SVM_std_featurelist.txt', 'X_l2r_l2loss_svc_SVM_std_metrics.txt', 'outfolder', 0.95) (last one as a folder)
         self.dataname = dataname
         self.labelsname = labelsname
         self.samplesname = samplesname
@@ -241,18 +241,14 @@ class Net:
             myConf['matrix'] = mtr
             myConf['nodeColor'] = self.get_randColor()
             myConf['lineColor'] = '#D8D8D8'
-            myConf['outDir'] = os.path.join(self.outputpath, '/img')
+            saveDirectory = os.path.join(self.outputpath, 'img')
+            if not os.path.exists(saveDirectory):
+                os.makedirs(saveDirectory)
+            myConf['outDir'] = saveDirectory
             myConf['outFile'] = 'graph_label_' + str(int(self.aunilabels[n])) + '.png'
             myConf['label'] = self.aunilabels[n]
-            if self.aunilabels[n] == 0:                             ###FIXME not generic at all FIXME###
-                myConf['title'] = 'Graph of diseased people'              
-                self.listtitles.append(['Graph of diseased people'])
-            elif self.aunilabels[n] == 1:
-                myConf['title'] = 'Graph of healthy people'
-                self.listtitles.append(['Graph of healthy people'])
-            else:
-                myConf['title'] = 'Graph of the label' + str(self.aunilabels[n])
-                self.listtitles.append('Graph of the label ' + str(self.aunilabels[n]))
+            myConf['title'] = 'Graph of the label ' + str(self.aunilabels[n])
+            self.listtitles.append('Graph of the label ' + str(self.aunilabels[n]))
             self.listgraphpaths.append(os.path.join(myConf['outDir'], myConf['outFile']))
             self.drawNetwork(**myConf)
             n += 1
@@ -260,7 +256,14 @@ class Net:
         self.outDict = {}
         self.outDict['img'] = [f for f in self.listgraphpaths]
         self.outDict['titles'] = [t for t in self.listtitles]
-        np.savetxt(os.path.join(self.outputpath, 'data/himmatrix.txt'), self.himadjmatrix)
-        self.outDict['matrix'] = os.path.join(self.outputpath,'data/himmatrix.txt')
+        saveDirectory1 = os.path.join(self.outputpath, 'data')
+        if not os.path.exists(saveDirectory1):
+            os.makedirs(saveDirectory1)
+        np.savetxt(os.path.join(saveDirectory1, 'himmatrix.txt'), self.himadjmatrix)
+        self.outDict['matrix'] = os.path.join(self.outputpath, 'data/himmatrix.txt')
 
 ########
+
+if __name__ == '__main__':
+    n = Net('X.txt', 'Y.txt', 'sampleIDs.txt', 'names.txt', 'X_l2r_l2loss_svc_SVM_std_featurelist.txt', 'X_l2r_l2loss_svc_SVM_std_metrics.txt', 'outfolder', 0.95)
+    n.run()
