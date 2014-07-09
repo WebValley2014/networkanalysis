@@ -13,14 +13,14 @@ import os
 
 class Net:
 
-    def __init__(self, dataname, labelsname, samplesname, featuresname, rankingname, metricsname, pngoutputpath, thre): ### ('X.txt', 'Y.txt', 'sampleIDs.txt', 'names.txt', 'X_l2r_l2loss_svc_SVM_std_featurelist.txt', 'X_l2r_l2loss_svc_SVM_std_metrics.txt', 'pngout', 0.5) (last one as a folder)
+    def __init__(self, dataname, labelsname, samplesname, featuresname, rankingname, metricsname, outputpath, thre): ### ('X.txt', 'Y.txt', 'sampleIDs.txt', 'names.txt', 'X_l2r_l2loss_svc_SVM_std_featurelist.txt', 'X_l2r_l2loss_svc_SVM_std_metrics.txt', 'pngout', 0.5) (last one as a folder)
         self.dataname = dataname
         self.labelsname = labelsname
         self.samplesname = samplesname
         self.featuresname = featuresname
         self.rankingname = rankingname
         self.metricsname = metricsname
-        self.pngoutputpath = pngoutputpath
+        self.outputpath = outputpath
         self.thre = thre
 
 ########
@@ -241,7 +241,7 @@ class Net:
             myConf['matrix'] = mtr
             myConf['nodeColor'] = self.get_randColor()
             myConf['lineColor'] = '#D8D8D8'
-            myConf['outDir'] = self.pngoutputpath
+            myConf['outDir'] = os.path.join(self.outputpath, '/img')
             myConf['outFile'] = 'graph_label_' + str(int(self.aunilabels[n])) + '.png'
             myConf['label'] = self.aunilabels[n]
             if self.aunilabels[n] == 0:                             ###FIXME not generic at all FIXME###
@@ -260,7 +260,7 @@ class Net:
         self.outDict = {}
         self.outDict['img'] = [f for f in self.listgraphpaths]
         self.outDict['titles'] = [t for t in self.listtitles]
-        np.savetxt('himmatrix.txt', self.himadjmatrix)
-        self.outDict['matrix'] = 'himmatrix.txt'
+        np.savetxt(os.path.join(self.outputpath, 'data/himmatrix.txt'), self.himadjmatrix)
+        self.outDict['matrix'] = os.path.join(self.outputpath,'data/himmatrix.txt')
 
 ########
