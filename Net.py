@@ -1,7 +1,7 @@
 #######################################################
 ## this is the class Net.                            ##
 ## it has been proudly imagined and happily coded by ##
-## Davide Leonessi & Stefano Valentini      (c) 2014 ##																				still #WaitingFor #Visintainer
+## Davide Leonessi & Stefano Valentini      (c) 2014 ##
 #######################################################
 
 import numpy as np
@@ -208,7 +208,7 @@ class Net:
         outFile = kwargs.get('outFile', 'testNetwork.png')
         if not os.path.exists(outDir):
             os.makedirs(outDir)
-        filePath = os.path.join(outDir, outFile)
+        filePath = outDir + '/' + outFile
         g = igraph.Graph.Weighted_Adjacency(list(matrix),mode=igraph.ADJ_MAX)
         visual_style = {}
         visual_style["title"] = title
@@ -248,7 +248,7 @@ class Net:
             myConf['matrix'] = mtr
             myConf['nodeColor'] = self.get_randColor()
             myConf['lineColor'] = '#D8D8D8'
-            saveDirectory = os.path.join(self.outputpath, 'img')
+            saveDirectory = self.outputpath + '/img'
             if not os.path.exists(saveDirectory):
                 os.makedirs(saveDirectory)
             myConf['outDir'] = saveDirectory
@@ -256,18 +256,18 @@ class Net:
             myConf['label'] = self.legendfeatures
             myConf['title'] = 'Graph of the label ' + str(self.aunilabels[n])
             self.listtitles.append('Graph of the label ' + str(self.aunilabels[n]))
-            self.listgraphpaths.append(os.path.join(myConf['outDir'], myConf['outFile']))
+            self.listgraphpaths.append(myConf['outDir'] + '/' + myConf['outFile'])
             self.drawNetwork(**myConf)
             n += 1
 
         self.outDict = {}
         self.outDict['img'] = [f for f in self.listgraphpaths]
         self.outDict['titles'] = [t for t in self.listtitles]
-        saveDirectory1 = os.path.join(self.outputpath, 'data')
+        saveDirectory1 = self.outputpath + '/' + 'data'
         if not os.path.exists(saveDirectory1):
             os.makedirs(saveDirectory1)
-        np.savetxt(os.path.join(saveDirectory1, 'himmatrix.txt'), self.himadjmatrix)
-        self.outDict['matrix'] = os.path.join(self.outputpath, 'data/himmatrix.txt')
+        np.savetxt(saveDirectory1 + '/' + 'himmatrix.txt', self.himadjmatrix)
+        self.outDict['matrix'] = self.outputpath, '/data/himmatrix.txt'
 
 ########
 
